@@ -24,14 +24,24 @@
             <span class="brand-mark"></span>
             <span>Hymaia / Marketplace</span>
           </div>
-          <div class="status-pill" id="api-status">Connecting API...</div>
+          <div class="topbar-actions">
+            <label class="language-picker" for="language-select">
+              <span class="language-label" data-i18n="language.label">Language</span>
+              <select id="language-select" aria-label="Choose language">
+                <option value="en">English</option>
+                <option value="fr">Francais</option>
+                <option value="it">Italiano</option>
+              </select>
+            </label>
+            <div class="status-pill" id="api-status">Connecting API...</div>
+          </div>
         </nav>
 
         <div class="hero-grid">
           <section class="hero-copy">
-            <p class="eyebrow">Curated objects for focused spaces</p>
-            <h1>Minimal products, warm materials, no visual noise.</h1>
-            <p class="lede">
+            <p class="eyebrow" data-i18n="hero.eyebrow">Curated objects for focused spaces</p>
+            <h1 data-i18n="hero.title">Minimal products, warm materials, no visual noise.</h1>
+            <p class="lede" data-i18n="hero.lede">
               A lightweight storefront demo with a live Express API, in-memory catalog,
               and a frontend designed to feel calm rather than generic.
             </p>
@@ -42,22 +52,24 @@
                 type="search"
                 placeholder="Search lighting, audio, seating..."
                 aria-label="Search products"
+                data-i18n-placeholder="search.placeholder"
+                data-i18n-aria-label="search.ariaLabel"
               />
-              <button type="submit">Search</button>
+              <button type="submit" data-i18n="search.submit">Search</button>
             </form>
           </section>
 
           <aside class="hero-card">
-            <p class="card-label">Cart snapshot</p>
+            <p class="card-label" data-i18n="cart.snapshot">Cart snapshot</p>
             <div class="metric-row">
-              <span>Items</span>
+              <span data-i18n="cart.items">Items</span>
               <strong id="cart-count">--</strong>
             </div>
             <div class="metric-row">
-              <span>Total</span>
+              <span data-i18n="cart.total">Total</span>
               <strong id="cart-total">--</strong>
             </div>
-            <p class="card-note">Free shipping is already applied for this curated selection.</p>
+            <p class="card-note" data-i18n="cart.note">Free shipping is already applied for this curated selection.</p>
           </aside>
         </div>
       </header>
@@ -65,16 +77,16 @@
       <main class="content">
         <section class="collections-block">
           <div class="section-heading">
-            <p class="eyebrow">Collections</p>
-            <h2>Small sets with a clear mood.</h2>
+            <p class="eyebrow" data-i18n="collections.eyebrow">Collections</p>
+            <h2 data-i18n="collections.title">Small sets with a clear mood.</h2>
           </div>
           <div class="collections" id="collections"></div>
         </section>
 
         <section class="products-block">
           <div class="section-heading">
-            <p class="eyebrow">Catalog</p>
-            <h2>Designed to stay simple, even with live data.</h2>
+            <p class="eyebrow" data-i18n="catalog.eyebrow">Catalog</p>
+            <h2 data-i18n="catalog.title">Designed to stay simple, even with live data.</h2>
           </div>
           <div class="products-meta">
             <span id="results-count">Loading products...</span>
