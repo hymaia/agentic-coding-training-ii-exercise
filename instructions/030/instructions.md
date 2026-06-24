@@ -6,10 +6,12 @@ Measure whether a translation-checker skill finds missing translations with less
 
 ### Setup
 
+- Create a translation-checker skill in the `./claude/skills/` directory of this repository.
 - Use isolated runs or git worktrees.
-- Start from `.backup/swe-advanced/030-translation-checker-skill-eval/starter-repo/`.
-- Run the LeBonPoint-style frontend fixture with `npm run app`.
-- Use the tiny fixture with one source locale, `en`, and two target locales, `fr` and `oc`.
+- Start from this repository root.
+- Use the synthetic marketplace fixture under `marketplace/src/`.
+- If you want to inspect the UI while evaluating, run the fixture from `marketplace/src` with `npm run start` or `npm run dev`.
+- Use the tiny fixture with one source locale, `en`, and two target locales, `fr` and `it`.
 - The target locales contain deliberate gaps so the ground-truth missing keys are known before you run the eval.
 
 ### Tasks
@@ -29,8 +31,8 @@ Use `/goal` to let the agent improve the skill instructions automatically after 
 /goal the translation-checker skill is improved, proven by `npm run smoke`
 showing the WITH-skill run has 0 false positives, 0 false negatives,
 no diff violations, and trigger eval has 0 failures; only
-`.backup/swe-advanced/030-translation-checker-skill-eval/starter-repo/skills/translation-checker/SKILL.md`,
-transcript fixtures, and reports may change; stop after 6 turns with blockers.
+the translation-checker `SKILL.md`, transcript fixtures, and reports may change;
+stop after 6 turns with blockers.
 ```
 
 Keep this as a completion condition, not a vague instruction. The evaluator only sees the transcript, so the agent must print the relevant smoke-report evidence before stopping.
