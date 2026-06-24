@@ -7,6 +7,8 @@
     "apps/*"
   ],
   "scripts": {
+    "admin": "node apps/admin/server.js",
+    "admin:dev": "node --watch apps/admin/server.js",
     "dev": "node --watch server.js",
     "start": "node server.js",
     "test": "echo \"Synthetic fixture only. Use npm run smoke from the starter root.\""

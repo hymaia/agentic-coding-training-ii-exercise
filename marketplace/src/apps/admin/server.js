@@ -1,0 +1,138 @@
+import express from "express";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+const port = process.env.PORT || 3001;
+
+function isoNow() {
+  return new Date().toISOString();
+}
+
+let nextThreadId = 1;
+let nextMessageId = 1;
+
+const reviewThreads = [];
+
+function sanitizeThread(thread) {
+  return {
+    ...thread,
+    replyAllowed: !thread.messages.some((message) => message.author === "author"),
+  };
+}
+
+function summarizeThreads(threads) {
+  return threads.map((thread) => ({
+    id: thread.id,
+    status: thread.status,
+    createdAt: thread.createdAt,
+    finding: thread.finding,
+    replyAllowed: !thread.messages.some((message) => message.author === "author"),
+    messageCount: thread.messages.length,
+    lastMessageAt: thread.messages.at(-1)?.createdAt ?? thread.createdAt,
+    preview: thread.messages.at(-1)?.body ?? "",
+  }));
+}
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("/api/health", (_req, res) => {
+  res.json({
+    status: "ok",
+    service: "admin-review-inbox",
+    timestamp: isoNow(),
+  });
+});
+
+app.get("/api/chat/threads", (_req, res) => {
+  const threads = summarizeThreads(reviewThreads).sort((a, b) =>
+    b.lastMessageAt.localeCompare(a.lastMessageAt),
+  );
+  res.json({ items: threads, total: threads.length });
+});
+
+app.get("/api/chat/threads/:id", (req, res) => {
+  const thread = reviewThreads.find((item) => item.id === req.params.id);
+  if (!thread) {
+    res.status(404).json({ error: "Thread not found" });
+    return;
+  }
+
+  res.json(sanitizeThread(thread));
+});
+
+app.post("/api/chat/threads", (req, res) => {
+  const { finding, message } = req.body ?? {};
+  if (
+    !finding ||
+    typeof finding.file !== "string" ||
+    typeof finding.line !== "number" ||
+    typeof finding.severity !== "string" ||
+    typeof finding.message !== "string" ||
+    typeof finding.evidence !== "string" ||
+    typeof message !== "string"
+  ) {
+    res.status(400).json({ error: "Invalid thread payload" });
+    return;
+  }
+
+  const createdAt = isoNow();
+  const thread = {
+    id: `thread-${nextThreadId++}`,
+    finding,
+    status: "open",
+    createdAt,
+    messages: [
+      {
+        id: `message-${nextMessageId++}`,
+        author: "review-bot",
+        body: message.trim(),
+        createdAt,
+      },
+    ],
+  };
+
+  reviewThreads.unshift(thread);
+  res.status(201).json(sanitizeThread(thread));
+});
+
+app.post("/api/chat/threads/:id/reply", (req, res) => {
+  const thread = reviewThreads.find((item) => item.id === req.params.id);
+  if (!thread) {
+    res.status(404).json({ error: "Thread not found" });
+    return;
+  }
+
+  if (thread.messages.some((message) => message.author === "author")) {
+    res.status(409).json({ error: "Author reply already recorded for this thread" });
+    return;
+  }
+
+  const body = String(req.body?.body ?? "").trim();
+  if (!body) {
+    res.status(400).json({ error: "Reply body is required" });
+    return;
+  }
+
+  thread.messages.push({
+    id: `message-${nextMessageId++}`,
+    author: "author",
+    body,
+    createdAt: isoNow(),
+  });
+  thread.status = "replied";
+
+  res.status(201).json(sanitizeThread(thread));
+});
+
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+app.listen(port, () => {
+  console.log(`Admin review inbox listening on http://localhost:${port}`);
+});
