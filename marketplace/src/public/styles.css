@@ -1,0 +1,326 @@
+:root {
+  --bg: #f4efe7;
+  --bg-strong: #e6ddcf;
+  --surface: rgba(255, 252, 247, 0.76);
+  --surface-strong: #fffaf3;
+  --line: rgba(47, 39, 28, 0.12);
+  --text: #241b12;
+  --muted: #6c5b49;
+  --accent: #b96a3a;
+  --accent-soft: rgba(185, 106, 58, 0.12);
+  --shadow: 0 24px 80px rgba(58, 39, 15, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Manrope", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.85), transparent 30%),
+    linear-gradient(180deg, #f7f2eb 0%, #f1e8db 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(130deg, rgba(185, 106, 58, 0.08), transparent 28%),
+    radial-gradient(circle at 80% 20%, rgba(78, 103, 84, 0.15), transparent 18%);
+}
+
+.page-shell {
+  width: min(1120px, calc(100% - 32px));
+  margin: 24px auto 40px;
+}
+
+.hero,
+.content section {
+  background: var(--surface);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.hero {
+  border-radius: 32px;
+  padding: 24px;
+  overflow: hidden;
+}
+
+.topbar,
+.hero-grid,
+.product-topline,
+.product-footer,
+.metric-row,
+.section-heading,
+.products-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.brand-mark {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2e473b, #c16c3c);
+  box-shadow: 0 0 0 6px rgba(193, 108, 60, 0.1);
+}
+
+.status-pill,
+.stock-badge {
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+}
+
+.hero-grid {
+  margin-top: 56px;
+  align-items: stretch;
+}
+
+.hero-copy {
+  flex: 1.4;
+  animation: rise 600ms ease both;
+}
+
+.hero-card {
+  flex: 0.8;
+  background: linear-gradient(180deg, rgba(255, 250, 243, 0.96), rgba(246, 234, 220, 0.9));
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 24px;
+  animation: rise 700ms ease both;
+}
+
+.eyebrow,
+.card-label,
+.product-category,
+.product-accent {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+h1,
+h2,
+.product-title {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+h1 {
+  max-width: 10ch;
+  font-size: clamp(3.5rem, 7vw, 6.5rem);
+  line-height: 0.92;
+  margin-top: 12px;
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.lede,
+.card-note,
+.product-description,
+.collections p,
+.products-meta,
+.metric-row span {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.lede {
+  max-width: 56ch;
+  font-size: 1.05rem;
+  margin: 18px 0 0;
+}
+
+.search-bar {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+  max-width: 620px;
+}
+
+.search-bar input,
+.search-bar button {
+  border: 0;
+  border-radius: 18px;
+  font: inherit;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px rgba(47, 39, 28, 0.08);
+}
+
+.search-bar button {
+  padding: 16px 22px;
+  font-weight: 800;
+  background: var(--text);
+  color: #fff8f1;
+  cursor: pointer;
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.search-bar button:hover {
+  transform: translateY(-1px);
+  background: #33261a;
+}
+
+.metric-row {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.metric-row strong {
+  font-size: 1.4rem;
+}
+
+.content {
+  margin-top: 22px;
+  display: grid;
+  gap: 22px;
+}
+
+.content section {
+  border-radius: 28px;
+  padding: 26px;
+}
+
+.collections {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.collections article,
+.product-card {
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: rgba(255, 253, 249, 0.88);
+}
+
+.collections article {
+  padding: 20px;
+}
+
+.collections h3 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.product-card {
+  padding: 20px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: translateY(10px);
+  opacity: 0;
+  animation: rise 500ms ease forwards;
+}
+
+.product-rating {
+  font-size: 0.9rem;
+}
+
+.product-title {
+  margin-top: 18px;
+  font-size: 2rem;
+}
+
+.product-description {
+  margin-top: 8px;
+}
+
+.product-price {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.5rem;
+}
+
+.stock-badge {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: transparent;
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(18px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-grid,
+  .section-heading,
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .collections,
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    max-width: 12ch;
+  }
+
+  .page-shell {
+    width: min(100% - 20px, 1120px);
+    margin-top: 10px;
+  }
+
+  .hero,
+  .content section {
+    border-radius: 24px;
+  }
+}

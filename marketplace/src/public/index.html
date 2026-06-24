@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hymaia Marketplace</title>
+    <meta
+      name="description"
+      content="A minimal marketplace demo served by Express with a curated frontend and JSON API."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Cormorant+Garamond:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <nav class="topbar">
+          <div class="brand">
+            <span class="brand-mark"></span>
+            <span>Hymaia / Marketplace</span>
+          </div>
+          <div class="status-pill" id="api-status">Connecting API...</div>
+        </nav>
+
+        <div class="hero-grid">
+          <section class="hero-copy">
+            <p class="eyebrow">Curated objects for focused spaces</p>
+            <h1>Minimal products, warm materials, no visual noise.</h1>
+            <p class="lede">
+              A lightweight storefront demo with a live Express API, in-memory catalog,
+              and a frontend designed to feel calm rather than generic.
+            </p>
+            <form class="search-bar" id="search-form">
+              <input
+                id="search-input"
+                name="q"
+                type="search"
+                placeholder="Search lighting, audio, seating..."
+                aria-label="Search products"
+              />
+              <button type="submit">Search</button>
+            </form>
+          </section>
+
+          <aside class="hero-card">
+            <p class="card-label">Cart snapshot</p>
+            <div class="metric-row">
+              <span>Items</span>
+              <strong id="cart-count">--</strong>
+            </div>
+            <div class="metric-row">
+              <span>Total</span>
+              <strong id="cart-total">--</strong>
+            </div>
+            <p class="card-note">Free shipping is already applied for this curated selection.</p>
+          </aside>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="collections-block">
+          <div class="section-heading">
+            <p class="eyebrow">Collections</p>
+            <h2>Small sets with a clear mood.</h2>
+          </div>
+          <div class="collections" id="collections"></div>
+        </section>
+
+        <section class="products-block">
+          <div class="section-heading">
+            <p class="eyebrow">Catalog</p>
+            <h2>Designed to stay simple, even with live data.</h2>
+          </div>
+          <div class="products-meta">
+            <span id="results-count">Loading products...</span>
+          </div>
+          <div class="products-grid" id="products"></div>
+        </section>
+      </main>
+    </div>
+
+    <template id="product-template">
+      <article class="product-card">
+        <div class="product-topline">
+          <span class="product-category"></span>
+          <span class="product-rating"></span>
+        </div>
+        <h3 class="product-title"></h3>
+        <p class="product-description"></p>
+        <div class="product-footer">
+          <div>
+            <p class="product-accent"></p>
+            <strong class="product-price"></strong>
+          </div>
+          <span class="stock-badge"></span>
+        </div>
+      </article>
+    </template>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

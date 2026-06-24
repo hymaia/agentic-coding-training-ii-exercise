@@ -1,0 +1,17 @@
+{
+  "name": "synthetic-marketplace-monorepo",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js",
+    "test": "echo \"Synthetic fixture only. Use npm run smoke from the starter root.\""
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

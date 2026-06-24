@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noEmit": true,
+    "lib": ["ES2022", "DOM"],
+    "skipLibCheck": true,
+    "rootDir": "."
+  },
+  "include": ["agent/src/**/*.ts", "agent/src/**/*.d.ts", "marketplace/src/**/*.ts", "marketplace/src/**/*.d.ts"]
+}

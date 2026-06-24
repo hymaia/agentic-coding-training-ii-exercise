@@ -1,0 +1,48 @@
+{
+  "description": "Synthetic marketplace monorepo graph used by the workspace impact analyzer exercise.",
+  "workspaces": {
+    "packages/web": {
+      "dependsOn": ["packages/ui", "packages/catalog", "packages/search", "packages/auth"],
+      "testTarget": "npm --workspace packages/web test"
+    },
+    "packages/ui": {
+      "dependsOn": [],
+      "testTarget": "npm --workspace packages/ui test"
+    },
+    "packages/catalog": {
+      "dependsOn": [],
+      "testTarget": "npm --workspace packages/catalog test"
+    },
+    "packages/checkout": {
+      "dependsOn": ["packages/catalog", "packages/auth"],
+      "testTarget": "npm --workspace packages/checkout test"
+    },
+    "packages/search": {
+      "dependsOn": ["packages/catalog"],
+      "testTarget": "npm --workspace packages/search test"
+    },
+    "packages/auth": {
+      "dependsOn": [],
+      "testTarget": "npm --workspace packages/auth test"
+    },
+    "apps/admin": {
+      "dependsOn": ["packages/ui", "packages/catalog", "packages/auth"],
+      "testTarget": "npm --workspace apps/admin test"
+    },
+    "apps/storefront": {
+      "dependsOn": [
+        "packages/web",
+        "packages/ui",
+        "packages/catalog",
+        "packages/checkout",
+        "packages/search",
+        "packages/auth"
+      ],
+      "testTarget": "npm --workspace apps/storefront test"
+    },
+    "apps/seller-portal": {
+      "dependsOn": ["packages/ui", "packages/catalog", "packages/auth"],
+      "testTarget": "npm --workspace apps/seller-portal test"
+    }
+  }
+}

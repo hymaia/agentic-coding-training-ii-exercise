@@ -1,0 +1,16 @@
+{
+  "name": "workspace-impact-analyzer-starter",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json --outDir dist --noEmit false",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "smoke": "npm run build && node dist/agent/src/smoke-test.js"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.3.187"
+  }
+}
