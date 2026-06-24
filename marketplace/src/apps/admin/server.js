@@ -1,9 +1,14 @@
 import express from "express";
+import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const issueResolutionsDirectory = path.resolve(
+  __dirname,
+  "../../../../knowledge-base/issue-resolutions",
+);
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -22,6 +27,48 @@ function sanitizeThread(thread) {
     ...thread,
     replyAllowed: !thread.messages.some((message) => message.author === "author"),
   };
+}
+
+function toIssueFilename(threadId) {
+  return `${threadId.replace(/[^a-zA-Z0-9-_]/g, "-")}.md`;
+}
+
+function toIssueMarkdown(thread, reply) {
+  return `# Review Reply: ${thread.id}
+
+## Finding
+
+- File: \`${thread.finding.file}\`
+- Line: ${thread.finding.line}
+- Severity: ${thread.finding.severity}
+- Message: ${thread.finding.message}
+- Evidence: ${thread.finding.evidence}
+
+## Thread
+
+- Thread ID: ${thread.id}
+- Created At: ${thread.createdAt}
+- Reply Recorded At: ${reply.createdAt}
+
+## Review Bot Message
+
+${thread.messages
+  .filter((message) => message.author === "review-bot")
+  .map((message) => message.body)
+  .join("\n\n")}
+
+## Author Reply
+
+${reply.body}
+`;
+}
+
+async function storeReplyAsMarkdown(thread, reply) {
+  await mkdir(issueResolutionsDirectory, { recursive: true });
+  const issueFilename = toIssueFilename(thread.id);
+  const issuePath = path.join(issueResolutionsDirectory, issueFilename);
+  await writeFile(issuePath, toIssueMarkdown(thread, reply), "utf8");
+  return path.relative(process.cwd(), issuePath);
 }
 
 function summarizeThreads(threads) {
@@ -100,7 +147,7 @@ app.post("/api/chat/threads", (req, res) => {
   res.status(201).json(sanitizeThread(thread));
 });
 
-app.post("/api/chat/threads/:id/reply", (req, res) => {
+app.post("/api/chat/threads/:id/reply", async (req, res) => {
   const thread = reviewThreads.find((item) => item.id === req.params.id);
   if (!thread) {
     res.status(404).json({ error: "Thread not found" });
@@ -118,13 +165,25 @@ app.post("/api/chat/threads/:id/reply", (req, res) => {
     return;
   }
 
-  thread.messages.push({
+  const reply = {
     id: `message-${nextMessageId++}`,
     author: "author",
     body,
     createdAt: isoNow(),
-  });
-  thread.status = "replied";
+  };
+
+  try {
+    const replyDocumentPath = await storeReplyAsMarkdown(thread, reply);
+    thread.messages.push(reply);
+    thread.status = "replied";
+    thread.replyDocumentPath = replyDocumentPath;
+  } catch (error) {
+    res.status(500).json({
+      error: "Failed to store reply in knowledge-base/issue-resolutions",
+      detail: error instanceof Error ? error.message : String(error),
+    });
+    return;
+  }
 
   res.status(201).json(sanitizeThread(thread));
 });

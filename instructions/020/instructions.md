@@ -40,6 +40,7 @@ Human and agent edits have been made in the marketplace repo. You need a repeata
 9. Start the local chat server automatically when the workflow begins.
 10. Handle author replies by polling or calling the local chat API, not by waiting for main chat input.
 11. Block on each required author reply until it is available through the local chat API.
+12. Save the final workflow to claude.
 
 ---
 
