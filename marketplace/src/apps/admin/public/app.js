@@ -2,6 +2,7 @@ const apiStatus = document.querySelector("#api-status");
 const resultsCount = document.querySelector("#results-count");
 const threadCount = document.querySelector("#thread-count");
 const openCount = document.querySelector("#open-count");
+const openCountCard = document.querySelector("#open-count-card");
 const threadList = document.querySelector("#thread-list");
 const threadPanel = document.querySelector("#thread-panel");
 
@@ -46,6 +47,42 @@ function severityLabel(severity) {
   return severity.toUpperCase();
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function formatMessageBody(body, author) {
+  if (author === "author") {
+    return `<p>${escapeHtml(body)}</p>`;
+  }
+
+  const [beforeEvidence, evidenceChunk] = body.split(" Evidence: ");
+  const [summaryChunk, reviewersChunk] = beforeEvidence.split(" Agreed by ");
+  const reviewerNote = reviewersChunk ? `Agreed by ${reviewersChunk}` : "";
+  const evidenceNote = evidenceChunk || "";
+
+  return `
+    <div class="message-copy">
+      <p class="message-summary">${escapeHtml(summaryChunk)}</p>
+      ${
+        evidenceNote
+          ? `<p><span class="message-label">Evidence</span>${escapeHtml(evidenceNote)}</p>`
+          : ""
+      }
+      ${
+        reviewerNote
+          ? `<p><span class="message-label">Reviewers</span>${escapeHtml(reviewerNote)}</p>`
+          : ""
+      }
+    </div>
+  `;
+}
+
 function replyState(thread) {
   return thread.replyAllowed
     ? {
@@ -61,9 +98,12 @@ function replyState(thread) {
 }
 
 function renderThreadList() {
+  const openThreadCount = threads.filter((thread) => thread.replyAllowed).length;
+
   resultsCount.textContent = `${threads.length} accepted finding${threads.length === 1 ? "" : "s"}`;
   threadCount.textContent = String(threads.length);
-  openCount.textContent = String(threads.filter((thread) => thread.replyAllowed).length);
+  openCount.textContent = String(openThreadCount);
+  openCountCard?.classList.toggle("summary-card-open", openThreadCount > 0);
 
   if (!threads.length) {
     threadList.innerHTML = `
@@ -112,7 +152,7 @@ function renderThreadPanel(thread) {
             <strong>${message.author === "author" ? "Author" : "Review Bot"}</strong>
             <span>${formatDate(message.createdAt)}</span>
           </div>
-          <p>${message.body}</p>
+          ${formatMessageBody(message.body, message.author)}
         </article>
       `,
     )

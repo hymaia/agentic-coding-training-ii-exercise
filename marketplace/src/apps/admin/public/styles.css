@@ -168,6 +168,7 @@ h3 {
 .chat-layout {
   display: grid;
   grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
+  align-items: start;
   gap: 12px;
   margin-top: 16px;
 }
@@ -188,11 +189,17 @@ h3 {
 .thread-card {
   appearance: none;
   width: 100%;
+  min-width: 0;
   padding: 14px;
   text-align: left;
   color: inherit;
   cursor: pointer;
   animation: rise 180ms ease both;
+}
+
+.thread-card-topline,
+.thread-card-footer {
+  flex-wrap: wrap;
 }
 
 .thread-card:hover,
@@ -203,6 +210,7 @@ h3 {
 
 .thread-card h3 {
   margin: 12px 0 8px;
+  overflow-wrap: anywhere;
 }
 
 .thread-card p,
@@ -215,6 +223,7 @@ h3 {
 .finding-card p {
   color: var(--muted);
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .thread-status-detail {
@@ -270,8 +279,32 @@ h3 {
   background: #f0f7ef;
 }
 
+.message-copy {
+  display: grid;
+  gap: 10px;
+  max-width: 78ch;
+}
+
+.message-copy p {
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.message-summary {
+  font-size: 1.02rem;
+}
+
+.message-label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .reply-form {
-  margin-top: auto;
   display: grid;
   gap: 10px;
 }
